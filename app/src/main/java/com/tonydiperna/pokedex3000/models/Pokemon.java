@@ -28,7 +28,9 @@ public class Pokemon {
     public static final String HEIGHT = "height";
     public static final String WEIGHT = "weight";
     public static final String HAPPINESS = "happiness";
-    public static final String MF_RATIO = "male_femal_ratio";
+    public static final String MF_RATIO = "male_female_ratio";
+    public static final String SPRITES = "sprites";
+    public static final String IMAGE = "image";
 
     private int _id;
     private String _name;
@@ -55,12 +57,13 @@ public class Pokemon {
     private int _weight;
     private int _happiness;
     private String _maleFemaleRatio;
+    private String[] _sprites;
 
     public Pokemon() {
-        this(0, "", "", new String[0], new String[0], new Evolution(), new String[0], new String[0], 0, "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, "", "", 0, 0, "");
+        this(0, "", "", new String[0], new String[0], new Evolution(), new String[0], new String[0], 0, "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, "", "", 0, 0, "", new String[0]);
     }
 
-    public Pokemon(int id, String name, String resourceUri, String[] abilities, String[] eggGroups, Evolution evolution, String[] moves, String[] types, int catchRate, String species, int hp, int attack, int defense, int spAtk, int spDef, int speed, int total, int eggCycles, String evYield, int exp, String growthRate, String height, int weight, int happiness, String maleFemaleRatio) {
+    public Pokemon(int id, String name, String resourceUri, String[] abilities, String[] eggGroups, Evolution evolution, String[] moves, String[] types, int catchRate, String species, int hp, int attack, int defense, int spAtk, int spDef, int speed, int total, int eggCycles, String evYield, int exp, String growthRate, String height, int weight, int happiness, String maleFemaleRatio, String[] sprites) {
         _id = id;
         _name = name;
         _resourceUri = resourceUri;
@@ -86,6 +89,7 @@ public class Pokemon {
         _weight = weight;
         _happiness = happiness;
         _maleFemaleRatio = maleFemaleRatio;
+        _sprites = sprites;
     }
 
     public int getId() {
@@ -188,6 +192,10 @@ public class Pokemon {
         return _maleFemaleRatio;
     }
 
+    public String[] getSprites() {
+        return _sprites;
+    }
+
     @Override
     public String toString() {
         return "Pokemon{" +
@@ -216,6 +224,7 @@ public class Pokemon {
                 ", _weight=" + _weight +
                 ", _happiness=" + _happiness +
                 ", _maleFemaleRatio='" + _maleFemaleRatio + '\'' +
+                ", _sprites=" + Arrays.toString(_sprites) +
                 '}';
     }
 }

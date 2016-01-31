@@ -2,7 +2,6 @@ package com.tonydiperna.pokedex3000;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
 import com.tonydiperna.pokedex3000.models.Evolution;
 import com.tonydiperna.pokedex3000.models.Pokemon;
 import com.tonydiperna.pokedex3000.models.SimplePokemon;
@@ -30,6 +29,8 @@ public class BaseService {
     public static final int MAX_POKEMON_ID = 649;
 
     public static final String POKEMON_ENDPOINT = "pokemon/";
+
+    public static final String SPRITE_ENDPOINT = "sprite/";
 
     public static Response request(Request request) throws IOException {
         Log.d("Endpoint", request.url().toString());
@@ -122,9 +123,18 @@ public class BaseService {
         String height = pokemon.getString(Pokemon.HEIGHT);
         int weight = pokemon.getInt(Pokemon.WEIGHT);
         int happiness = pokemon.getInt(Pokemon.HAPPINESS);
-//        String maleFemaleRatio = pokemon.getString(Pokemon.MF_RATIO);
+        String maleFemaleRatio = pokemon.getString(Pokemon.MF_RATIO);
 
-        Pokemon result = new Pokemon(id, name, resourceUri, abilities, eggGroups, evolution, moves, types, catchRate, species, hp, attack, defense, spAtk, spDef, speed, total, eggCycles, evYield, exp, growthRate, height, weight, happiness, "");
+        jsonArray = pokemon.getJSONArray(Pokemon.SPRITES);
+        String[] sprites = new String[jsonArray.length()];
+        for(int i = 0; i < jsonArray.length(); i++) {
+            JSONObject obj = jsonArray.getJSONObject(i);
+            sprites[i] = getSprite(getIdFromUri(obj.getString(Pokemon.RESOURCE_URI)));
+        }
+
+        Log.d("POOP", sprites[0]);
+
+        Pokemon result = new Pokemon(id, name, resourceUri, abilities, eggGroups, evolution, moves, types, catchRate, species, hp, attack, defense, spAtk, spDef, speed, total, eggCycles, evYield, exp, growthRate, height, weight, happiness, maleFemaleRatio, sprites);
 
         return result;
     }
@@ -132,5 +142,12 @@ public class BaseService {
     private static int getIdFromUri(String resourceUri) {
         String[] uriComponents =  resourceUri.split("/");
         return Integer.parseInt(uriComponents[uriComponents.length - 1]);
+    }
+
+    private static String getSprite(int id) throws IOException, JSONException {
+        Response response = request(SPRITE_ENDPOINT, id);
+
+        JSONObject obj = new JSONObject(response.body().string());
+        return obj.getString(Pokemon.IMAGE);
     }
 }

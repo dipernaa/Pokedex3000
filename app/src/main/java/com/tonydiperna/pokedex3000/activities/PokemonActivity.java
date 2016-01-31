@@ -6,21 +6,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.tonydiperna.pokedex3000.R;
 import com.tonydiperna.pokedex3000.loaders.PokemonLoader;
 import com.tonydiperna.pokedex3000.models.Pokemon;
 
-import org.w3c.dom.Text;
-
-import java.util.List;
 
 public class PokemonActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Pokemon> {
 
     private int _pokemonId;
     private TextView textView;
+    private ImageView imageView;
     private View progress;
 
     @Override
@@ -30,7 +30,8 @@ public class PokemonActivity extends AppCompatActivity implements LoaderManager.
 
         _pokemonId = getIntent().getIntExtra("pokemonId", 1);
         progress = findViewById(R.id.routes_progress_bar);
-        textView = (TextView) findViewById(R.id.pokemon_detail);
+        imageView = (ImageView) findViewById(R.id.pokemon_sprite);
+        textView = (TextView) findViewById(R.id.pokemon_name);
 
         getSupportLoaderManager().restartLoader(0, null, this);
     }
@@ -47,7 +48,8 @@ public class PokemonActivity extends AppCompatActivity implements LoaderManager.
         if (data == null) {
             Toast.makeText(this, "Could not load pokemon. Check network connection", Toast.LENGTH_LONG).show();
         } else {
-            textView.setText(data.toString());
+            Picasso.with(this).load("http://pokeapi.co" + data.getSprites()[0]).into(imageView);
+            textView.setText(data.getName());
         }
     }
 
